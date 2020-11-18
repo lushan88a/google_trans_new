@@ -20,9 +20,9 @@ License
 ====
 google_trans_new is licensed under the MIT License. The terms are as follows:  
 
-The MIT License (MIT)  
+MIT License  
 
-Copyright (c) 2015 SuHun Han  
+Copyright (c) 2020 lushan88a  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy  
 of this software and associated documentation files (the "Software"), to deal  
