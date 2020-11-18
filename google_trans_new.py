@@ -91,7 +91,6 @@ class google_new_trans:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    print(decoded_line)
                     data_got = re.search(r',null,\[\[\\\"(.*?)\\\",\[',decoded_line).group(1)
                     data_got = data_got.replace('\\\\\\',"")
                     return data_got
