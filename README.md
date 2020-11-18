@@ -3,7 +3,16 @@
 A free and unlimited python tools for google translate api.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 ***
-
+  
+  
+Installation
+====
+```
+pip install google_trans_new
+```
+***
+  
+  
 Basic Usage
 =====
 ```python  
@@ -24,7 +33,8 @@ Prerequisites
 * **requests**  
 * **six**  
 ***
-
+  
+  
 License
 ====
 google_trans_new is licensed under the MIT License. The terms are as follows:  
