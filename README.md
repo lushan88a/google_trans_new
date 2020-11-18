@@ -11,10 +11,10 @@ from google_new_trans import google_new_trans
   
 translator = google_new_trans('th','en','https://translate.google.cn')  
 # <Translate lang_tgt=ko lang_src=en url=https://translate.google.cn >  
-translate_text = translator.translate('สามารถ, ได้.')  
-# <Translate text=สามารถ, ได้. >  
+translate_text = translator.translate('สวัสดีจีน')  
+# <Translate text=สวัสดีจีน >  
 print(translate_text)
-# Can, can.
+# Hello china
 ```
 ***
 
