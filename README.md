@@ -20,9 +20,9 @@ print(translate_text)
 
 Prerequisites
 ====
-**Python >=3.6**  
-**requests**  
-**six**  
+* **Python >=3.6**  
+* **requests**  
+* **six**  
 ***
 
 License
