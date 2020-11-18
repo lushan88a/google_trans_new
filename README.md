@@ -1,7 +1,7 @@
 # google_trans_new
 
-A free and unlimited python tools for google translate api.
-It's very easy to use and solve the problem that the old api which use tk value cannot be used.
+A free and unlimited python tools for google translate api.  
+It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 ***
 
 Basic Usage
