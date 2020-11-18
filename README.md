@@ -2,6 +2,7 @@
 
 A simple tools for google translate api  
 Solved the problem that the old api cannot be used
+***
 
 Basic Usage
 =====
@@ -15,6 +16,14 @@ translate_text = translator.translate('สามารถ, ได้.')
 print(translate_text)
 # Can, can.
 ```
+***
+
+Prerequisites
+====
+**Python >=3.6**  
+**requests**  
+**six**  
+***
 
 License
 ====
