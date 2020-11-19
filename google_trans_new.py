@@ -6,6 +6,7 @@ from six.moves import urllib
 import urllib3
 import logging
 from constant import LANGUAGES,DEFAULT_SERVICE_URLS
+import pdb
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -112,14 +113,25 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    if self.lang_src == 'auto' or self.lang_tgt == 'auto':
-                        data_got = re.search(r',null,\[\[\\\"(.*?)\\\"\]', decoded_line).group(1)
-                        data_got = data_got.replace('\\\\\\', "")
-                        return data_got
+                    # pdb.set_trace()
+                    # translation_part = re.search('\[(null,|true,|false,){5}(.*),\\\\".{2,4}\\\\",1,*\\\\".{2,4}\\\\"]\\\\n,\\\\".{2,4}\\\\"]', decoded_line).group(2)
+                    translation_part = re.search('\[(null,|true,|false,){5}(.*),\\\\".{2,4}\\\\",1,\\\\".{2,4}\\\\\"]',decoded_line).group(2)
+
+                    #translation_part = re.search('\[(null,|true,|false,){5}(.*),\\\\"en\\\\",1,*\\\\".{2,4}\\\\"]\\\\n,\\\\".{2,4}\\\\"]', decoded_line).group(2)
+                    cleaned_translation_part = re.sub("false", "False",
+                                                      re.sub("true", "True", re.sub("null", "None",
+                                                                                    re.sub("\\\\", "",
+                                                                                           re.sub(
+                                                                                               "\\\\n",
+                                                                                               "",
+                                                                                               translation_part)))))
+                    translated_sentences = [re.sub('\[\"|\", *\[', '', x) for x in
+                                            re.findall("\[\"[^\[]+\", *\[", cleaned_translation_part)]
+                    if translated_sentences == []:
+                        return re.search("\"(.*)\"", cleaned_translation_part).group(1)
                     else:
-                        data_got = re.search(r',null,\[\[\\\"(.*?)\\\",\[',decoded_line).group(1)
-                        data_got = data_got.replace('\\\\\\',"")
-                        return data_got
+                        return ' '.join(translated_sentences)
+                r.raise_for_status()
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
