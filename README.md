@@ -21,6 +21,7 @@ from google_trans_new import google_translator
 translator = google_translator('en','th','cn')  
 # <Translate lang_src=en lang_tgt=th url_suffix=cn >  
 #  default parameter : lang_src=auto lang_tgt=auto url_suffix="cn"
+#  url_suffix="cn" use in https://translate.google.{}/ 
 translate_text = translator.translate('สวัสดีจีน')  
 # <Translate text=สวัสดีจีน >  
 print(translate_text)
