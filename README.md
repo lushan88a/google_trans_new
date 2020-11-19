@@ -16,10 +16,11 @@ pip install google_trans_new
 Basic Usage
 =====
 ```python  
-from google_trans_new import google_new_trans  
+from google_trans_new import google_translator  
   
-translator = google_new_trans('th','en','https://translate.google.cn')  
-# <Translate lang_tgt=ko lang_src=en url=https://translate.google.cn >  
+translator = google_translator('th','en','https://translate.google.cn')  
+# <Translate lang_tgt=th lang_src=en url=https://translate.google.cn >  
+#  default parameter : lang_tgt=auto lang_src=auto url=https://translate.google.cn
 translate_text = translator.translate('สวัสดีจีน')  
 # <Translate text=สวัสดีจีน >  
 print(translate_text)
