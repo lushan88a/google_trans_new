@@ -1,15 +1,19 @@
 # author LuShan
-# version : 0.0.1
+# version : 0.6.0
 import json,requests,random,re
 from urllib.parse import quote
 from six.moves import urllib
 import urllib3
 import logging
+from constant import LANGUAGES,DEFAULT_SERVICE_URLS
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+URLS_SUFFIX = [re.search('translate.google.(.*)',url.strip()).group(1) for url in DEFAULT_SERVICE_URLS]
+URL_SUFFIX_DEFAULT = 'cn'
 
 class google_new_transError(Exception):
     """Exception that uses context to present a meaningful error message"""
@@ -50,9 +54,26 @@ class google_new_transError(Exception):
 
         return "{}. Probable cause: {}".format(premise, cause)
 
-class google_new_trans:
+class google_translator:
 
-    def __init__(self,lang_src='',lang_tgt='en',url_base="https://translate.google.cn"):
+    def __init__(self,lang_src='auto',lang_tgt='auto',url_suffix="cn"):
+        if url_suffix not in URLS_SUFFIX:
+            self.url_suffix = URL_SUFFIX_DEFAULT
+        else:
+            self.url_suffix = url_suffix
+        url_base = "https://translate.google.{}".format(self.url_suffix)
+        try:
+            lang = LANGUAGES[lang_src]
+        except :
+            lang_src = 'auto'
+        try:
+            lang = LANGUAGES[lang_tgt]
+        except :
+            lang_src = 'auto'
+        if lang_src == '' :
+            lang_src = "auto"
+        if lang_tgt == '':
+            lang_tgt = 'auto'
         self.lang_src = lang_src
         self.lang_tgt = lang_tgt
         self.url = url_base + "/_/TranslateWebserverUi/data/batchexecute"
@@ -70,7 +91,7 @@ class google_new_trans:
 
     def translate(self,text):
         headers = {
-            "Referer": "http://translate.google.cn/",
+            "Referer": "http://translate.google.{}/".format(self.url_suffix),
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -91,9 +112,14 @@ class google_new_trans:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    data_got = re.search(r',null,\[\[\\\"(.*?)\\\",\[',decoded_line).group(1)
-                    data_got = data_got.replace('\\\\\\',"")
-                    return data_got
+                    if self.lang_src == 'auto' or self.lang_tgt == 'auto':
+                        data_got = re.search(r',null,\[\[\\\"(.*?)\\\"\]', decoded_line).group(1)
+                        data_got = data_got.replace('\\\\\\', "")
+                        return data_got
+                    else:
+                        data_got = re.search(r',null,\[\[\\\"(.*?)\\\",\[',decoded_line).group(1)
+                        data_got = data_got.replace('\\\\\\',"")
+                        return data_got
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
