@@ -86,7 +86,7 @@ class google_translator:
         espaced_rpc = json.dumps(rpc, separators=(',', ':'))
         text_urldecode = quote(text.strip())
         freq_initial = "f.req={}&".format(quote(espaced_rpc))
-        freq = freq_initial.replace(text_urldecode,text)
+        freq = freq_initial
         return freq
 
     def translate(self,text):
