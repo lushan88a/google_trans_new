@@ -16,7 +16,7 @@ pip install google_trans_new
 Basic Usage
 =====
 ```python  
-from google_new_trans import google_new_trans  
+from google_trans_new import google_new_trans  
   
 translator = google_new_trans('th','en','https://translate.google.cn')  
 # <Translate lang_tgt=ko lang_src=en url=https://translate.google.cn >  
