@@ -18,9 +18,9 @@ Basic Usage
 ```python  
 from google_trans_new import google_translator  
   
-translator = google_translator('th','en','https://translate.google.cn')  
-# <Translate lang_tgt=th lang_src=en url=https://translate.google.cn >  
-#  default parameter : lang_tgt=auto lang_src=auto url=https://translate.google.cn
+translator = google_translator('th','en','cn')  
+# <Translate lang_tgt=th lang_src=en url_suffix=cn >  
+#  default parameter : lang_tgt=auto lang_src=auto url_suffix="cn"
 translate_text = translator.translate('สวัสดีจีน')  
 # <Translate text=สวัสดีจีน >  
 print(translate_text)
