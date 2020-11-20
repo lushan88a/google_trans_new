@@ -2,6 +2,7 @@
 
 A free and unlimited python API for google translate.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
+This interface is for academic use only, please do not use it for commercial use.
 ***
   
   
@@ -15,7 +16,7 @@ pip install google_trans_new
   
 Basic Usage
 =====
-# Transalte
+### Transalte
 ```python  
 from google_trans_new import google_translator  
   
@@ -30,7 +31,7 @@ translate_text = translator.translate('สวัสดีจีน',lang_tgt='en
 print(translate_text)
 -> Hello china
 ```
-# Detect
+### Detect
 ```
 from google_trans_new import google_translator  
   
