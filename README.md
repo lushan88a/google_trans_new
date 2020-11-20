@@ -15,17 +15,30 @@ pip install google_trans_new
   
 Basic Usage
 =====
+# Transalte
 ```python  
 from google_trans_new import google_translator  
   
-translator = google_translator('en','th','cn')  
-# <Translate lang_src=en lang_tgt=th url_suffix=cn >  
+translator = google_translator(url_suffix='cn')  
+# <Translate url_suffix=cn >  
 #  default parameter : lang_src=auto lang_tgt=auto url_suffix="cn"
 #  url_suffix="cn" use in https://translate.google.{}/ 
-translate_text = translator.translate('สวัสดีจีน')  
+translate_text = translator.translate('สวัสดีจีน',lang_tgt='en',lang_src='th' )  
+# <Translate text=สวัสดีจีน lang_tgt=th lang_src=en>  
+#  default parameter : lang_src=auto lang_tgt=auto 
+#  API can automatically identify the src translation language, so you don’t need to set lang_src
+print(translate_text)
+-> Hello china
+```
+# Detect
+```
+from google_trans_new import google_translator  
+  
+detector = google_translator()  
+detect_result = detector.detect('สวัสดีจีน')
 # <Translate text=สวัสดีจีน >  
 print(translate_text)
-# Hello china
+-> ['th', 'thai']
 ```
 ***
 
