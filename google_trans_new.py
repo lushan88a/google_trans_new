@@ -173,7 +173,7 @@ class google_translator:
                         data_got = re.search(regex_str,decoded_line).group(1)
                     except Exception as e:
                         return 'ERROR'
-                    data_got = data_got.split('\\"')[-2]
+                    data_got = data_got.split('\\"')[3]
                     data_got = data_got.replace('\\\\\\',"")
                     data_got = data_got.split('\\\"]')[0]
                     return [data_got,LANGUAGES[data_got.lower()]]
