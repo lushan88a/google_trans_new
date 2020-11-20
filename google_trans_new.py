@@ -1,5 +1,6 @@
+# coding:utf-8
 # author LuShan
-# version : 1.0.0
+# version : 1.0.1
 import json,requests,random,re
 from urllib.parse import quote
 from six.moves import urllib
@@ -167,12 +168,12 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    regex_str = r"\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*?)\\\",\[\[\[|\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*?)\\\"\\n,\[\[\["
+                    regex_str = r"\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*).*?,\[\[\["
                     try:
                         data_got = re.search(regex_str,decoded_line).group(1)
-                    except:
+                    except Exception as e:
                         return 'ERROR'
-                    data_got = data_got.split('\\"')[-1]
+                    data_got = data_got.split('\\"')[-2]
                     data_got = data_got.replace('\\\\\\',"")
                     data_got = data_got.split('\\\"]')[0]
                     return [data_got,LANGUAGES[data_got.lower()]]
