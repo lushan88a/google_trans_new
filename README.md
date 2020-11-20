@@ -37,8 +37,8 @@ from google_trans_new import google_translator
   
 detector = google_translator()  
 detect_result = detector.detect('สวัสดีจีน')
-# <Translate text=สวัสดีจีน >  
-print(translate_text)
+# <Detect text=สวัสดีจีน >  
+print(detect_result)
 -> ['th', 'thai']
 ```
 ***
