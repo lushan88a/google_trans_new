@@ -1,4 +1,5 @@
 # google_trans_new
+### Version 1.0.6
 
 A free and unlimited python API for google translate.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
@@ -20,9 +21,9 @@ Basic Usage
 ```python  
 from google_trans_new import google_translator  
   
-translator = google_translator(url_suffix='cn')  
-# <Translate url_suffix=cn >  
-#  default parameter : lang_src=auto lang_tgt=auto url_suffix="cn"
+translator = google_translator(url_suffix='cn',timeout=5)  
+# <Translate url_suffix=cn timeout=5>  
+#  default parameter : url_suffix="cn" timeout=5
 #  url_suffix="cn" use in https://translate.google.{}/ 
 translate_text = translator.translate('สวัสดีจีน',lang_tgt='en',lang_src='th' )  
 # <Translate text=สวัสดีจีน lang_tgt=th lang_src=en>  
