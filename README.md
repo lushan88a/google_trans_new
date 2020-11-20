@@ -32,7 +32,7 @@ print(translate_text)
 -> Hello china
 ```
 ### Detect
-```
+```python
 from google_trans_new import google_translator  
   
 detector = google_translator()  
