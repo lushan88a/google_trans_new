@@ -1,12 +1,12 @@
-# coding:utf-8
+
 # author LuShan
-# version : 1.0.7
+# version : 1.1.0
 import json,requests,random,re
 from urllib.parse import quote
 from six.moves import urllib
 import urllib3
 import logging
-from .constant import LANGUAGES,DEFAULT_SERVICE_URLS
+from google_trans_new_test.constant import LANGUAGES,DEFAULT_SERVICE_URLS
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -146,12 +146,17 @@ class google_translator:
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
                     try :
-                        sentences = re.findall(r'\[\\\"(.*?)\\\"\]',"[[\\\"" + decoded_line.split(r',[[\"')[-1])
-                        data_got = ""
+                        response = (decoded_line + ']').replace('\\n','')
+                        response = json.loads(response)
+                        response = list(response)
+                        response = json.loads(response[0][2])
+                        response = list(response)
+                        sentences = response[1][0][0][5]
+                        translate_text = ""
                         for sentence in sentences :
-                            sentence = sentence.replace('\\\\\\','')
-                            data_got += sentence.split(r"\",[\"")[0].strip() + ' '
-                        return data_got
+                            sentence = sentence[0]
+                            translate_text += sentence.strip() + ' '
+                        return translate_text
                     except :
                         return "ERROR"
             r.raise_for_status()
@@ -192,15 +197,19 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    regex_str = r"\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*).*?,\[\[\["
+                    # regex_str = r"\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*).*?,\[\[\["
                     try:
-                        data_got = re.search(regex_str,decoded_line).group(1)
+                        # data_got = re.search(regex_str,decoded_line).group(1)
+                        response = (decoded_line + ']').replace('\\n', '')
+                        response = json.loads(response)
+                        response = list(response)
+                        response = json.loads(response[0][2])
+                        response = list(response)
+                        detect_lang = response[0][2]
                     except Exception as e:
                         raise Exception("error")
-                    data_got = data_got.split(",null,")[1].split('\\\"')[1]
-                    data_got = data_got.replace('\\\\\\',"")
-                    data_got = data_got.split('\\\"]')[0]
-                    return [data_got,LANGUAGES[data_got.lower()]]
+                    # data_got = data_got.split('\\\"]')[0]
+                    return [detect_lang,LANGUAGES[detect_lang.lower()]]
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
