@@ -19,7 +19,7 @@ pip install google_trans_new
   
 Basic Usage
 =====
-### Transalte
+### Translate
 ```python  
 from google_trans_new import google_translator  
   
