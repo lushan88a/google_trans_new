@@ -59,8 +59,9 @@ if __name__ == "__main__" :
       pool.close()
       pool.join()
 
-    time2 = time.time()
-    print(time2 - time1)
+      time2 = time.time()
+      print("Translating %s sentences, a total of %s s"%(len(texts),time2 - time1))
+-> Translating 720 sentences, a total of 25.89591908454895 s 
 ```
 ### Detect
 ```python
