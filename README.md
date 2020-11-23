@@ -5,7 +5,7 @@ A free and unlimited python API for google translate.
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 This interface is for academic use only, please do not use it for commercial use.  
   
-Version 1.1.1 add *Proxies* and *Multithreading Translate*
+Version 1.1.1 add **Proxies** and **Multithreading Translate**
 ***
   
   
