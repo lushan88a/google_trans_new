@@ -1,12 +1,12 @@
-
+# coding:utf-8
 # author LuShan
-# version : 1.1.0
+# version : 1.1.1
 import json,requests,random,re
 from urllib.parse import quote
 from six.moves import urllib
 import urllib3
 import logging
-from google_trans_new_test.constant import LANGUAGES,DEFAULT_SERVICE_URLS
+from .constant import LANGUAGES,DEFAULT_SERVICE_URLS
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -36,6 +36,7 @@ class google_new_transError(Exception):
         if rsp is None:
             premise = "Failed to connect"
 
+            return "{}. Probable cause: {}".format(premise, "timeout")
             # if tts.tld != 'com':
             #     host = _translate_url(tld=tts.tld)
             #     cause = "Host '{}' is not reachable".format(host)
@@ -79,8 +80,13 @@ class google_translator:
 
     :param timeout: Timeout Will be used for every request.
     :type timeout: number or a double of numbers
+
+    :param proxies: proxies Will be used for every request.
+    :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
+
     '''
-    def __init__(self,url_suffix="cn",timeout=5):
+    def __init__(self,url_suffix="cn",timeout=5,proxies=None):
+        self.proxies = proxies
         if url_suffix not in URLS_SUFFIX:
             self.url_suffix = URL_SUFFIX_DEFAULT
         else:
@@ -135,11 +141,14 @@ class google_translator:
         response = requests.Request(method='POST',
                                      url=self.url,
                                      data=freq,
-                                     headers=headers)
+                                     headers=headers,
+                                    )
         try:
+            if self.proxies == None or type(self.proxies) != dict :
+                self.proxies = {}
             with requests.Session() as s:
+                s.proxies = self.proxies
                 r = s.send(request=response.prepare(),
-                           proxies=urllib.request.getproxies(),
                            verify=False,
                            timeout=self.timeout)
             for line in r.iter_lines(chunk_size=1024):
@@ -160,13 +169,13 @@ class google_translator:
                     except :
                         return "ERROR"
             r.raise_for_status()
+        except requests.exceptions.ConnectTimeout as e :
+            raise e
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
-            log.debug(str(e))
             raise google_new_transError(tts=self, response=r)
         except requests.exceptions.RequestException as e:
             # Request failed
-            log.debug(str(e))
             raise google_new_transError(tts=self)
 
     def detect(self,text):
@@ -189,11 +198,13 @@ class google_translator:
                                      data=freq,
                                      headers=headers)
         try:
+            if self.proxies == None or type(self.proxies) != dict:
+                self.proxies = {}
             with requests.Session() as s:
+                s.proxies = self.proxies
                 r = s.send(request=response.prepare(),
-                           proxies=urllib.request.getproxies(),
                            verify=False,
-                           timeout=5)
+                           timeout=self.timeout)
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
