@@ -23,9 +23,9 @@ Basic Usage
 ```python  
 from google_trans_new import google_translator  
   
-translator = google_translator(url_suffix='cn',timeout=5)  
-# <Translate url_suffix=cn timeout=5>  
-#  default parameter : url_suffix="cn" timeout=5
+translator = google_translator(url_suffix='cn',timeout=5,proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'})  
+# <Translate url_suffix=cn timeout=5 proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'}>  
+#  default parameter : url_suffix="cn" timeout=5 proxies={}
 #  url_suffix="cn" use in https://translate.google.{}/ 
 translate_text = translator.translate('สวัสดีจีน',lang_tgt='en',lang_src='th' )  
 # <Translate text=สวัสดีจีน lang_tgt=th lang_src=en>  
