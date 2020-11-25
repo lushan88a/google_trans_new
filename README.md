@@ -23,11 +23,11 @@ Basic Usage
 ```python  
 from google_trans_new import google_translator  
   
-translator = google_translator(url_suffix='cn',timeout=5,proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'})  
+translator = google_translator()  
 # <Translate url_suffix=cn timeout=5 proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'}>  
 #  default parameter : url_suffix="cn" timeout=5 proxies={}
 #  url_suffix="cn" use in https://translate.google.{}/ 
-translate_text = translator.translate('สวัสดีจีน',lang_tgt='en',lang_src='th' )  
+translate_text = translator.translate('สวัสดีจีน',lang_tgt='en')  
 # <Translate text=สวัสดีจีน lang_tgt=th lang_src=en>  
 #  default parameter : lang_src=auto lang_tgt=auto 
 #  API can automatically identify the src translation language, so you don’t need to set lang_src
