@@ -19,7 +19,7 @@ pip install google_trans_new
   
 Basic Usage
 =====
-### Translate Simple Use
+### Translate
 ```python
 from google_trans_new import google_translator  
   
@@ -30,6 +30,8 @@ print(translate_text)
 ```
 ***
 
+Advanced Usage
+=====
 ### Translate 
 ```python  
 from google_trans_new import google_translator  
