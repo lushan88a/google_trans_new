@@ -19,20 +19,32 @@ pip install google_trans_new
   
 Basic Usage
 =====
-### Translate
-```python  
+### Translate Simple Use
+```python
 from google_trans_new import google_translator  
   
 translator = google_translator()  
-# <Translate url_suffix=cn timeout=5 proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'}>  
-#  default parameter : url_suffix="cn" timeout=5 proxies={}
-#  url_suffix="cn" use in https://translate.google.{}/ 
 translate_text = translator.translate('สวัสดีจีน',lang_tgt='en')  
-# <Translate text=สวัสดีจีน lang_tgt=th lang_src=en>  
+print(translate_text)
+-> Hello china
+```
+***
+
+### Translate 
+```python  
+from google_trans_new import google_translator  
+
+# You can set the url_suffix according to your country. You can set url_suffix="hk" if you are in hong kong,url_suffix use in https://translate.google.{url_suffix}/ 
+# If you want use proxy, you can set proxies like proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'}
+translator = google_translator(url_suffix="hk",timeout=5,proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'})  
+# <Translator url_suffix=cn timeout=5 proxies={'http':'xxx.xxx.xxx.xxx:xxxx','https':'xxx.xxx.xxx.xxx:xxxx'}>  
+#  default parameter : url_suffix="cn" timeout=5 proxies={}
+translate_text = translator.translate('สวัสดีจีน',lang_tgt='zh')  
+# <Translate text=สวัสดีจีน lang_tgt=th lang_src=zh>  
 #  default parameter : lang_src=auto lang_tgt=auto 
 #  API can automatically identify the src translation language, so you don’t need to set lang_src
 print(translate_text)
--> Hello china
+-> 你好中国
 ```
 ### Multithreading Translate
 ```python
