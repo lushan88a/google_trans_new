@@ -118,12 +118,6 @@ class google_translator:
             lang = LANGUAGES[lang_tgt]
         except :
             lang_src = 'auto'
-        if lang_src == '' :
-            lang_src = "auto"
-        if lang_tgt == '':
-            lang_tgt = 'auto'
-        lang_src = lang_src
-        lang_tgt = lang_tgt
         if type(text) == str:
             text = text.strip('\n').replace('\n',"").replace('\t','').replace('\\\"','')
         elif type(text) == list:
@@ -165,7 +159,6 @@ class google_translator:
                         response = list(response)
                         pronounce_src = (response[0][0])
                         pronounce_tgt = (response[1][0][0][1])
-                        print(pronounce_tgt)
                         sentences = response[1][0][0][5]
                         translate_text = ""
                         for sentence in sentences :
