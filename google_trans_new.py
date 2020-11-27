@@ -1,6 +1,6 @@
 # coding:utf-8
 # author LuShan
-# version : 1.1.1
+# version : 1.1.2
 import json,requests,random,re
 from urllib.parse import quote
 from six.moves import urllib
@@ -84,6 +84,9 @@ class google_translator:
     :param proxies: proxies Will be used for every request.
     :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
 
+    :param pronounce: Default False. If you set pronounce=True, you will return a list lile [text_trans,pronouce_src,pronounce_tgt].
+    :type pronounce: class : bool;
+
     '''
     def __init__(self,url_suffix="cn",timeout=5,proxies=None):
         self.proxies = proxies
@@ -106,7 +109,7 @@ class google_translator:
         freq = freq_initial
         return freq
 
-    def translate(self,text,lang_tgt='auto',lang_src='auto'):
+    def translate(self,text,lang_tgt='auto',lang_src='auto',pronounce = False):
         try:
             lang = LANGUAGES[lang_src]
         except :
@@ -160,14 +163,20 @@ class google_translator:
                         response = list(response)
                         response = json.loads(response[0][2])
                         response = list(response)
+                        pronounce_src = (response[0][0])
+                        pronounce_tgt = (response[1][0][0][1])
+                        print(pronounce_tgt)
                         sentences = response[1][0][0][5]
                         translate_text = ""
                         for sentence in sentences :
                             sentence = sentence[0]
                             translate_text += sentence.strip() + ' '
-                        return translate_text
-                    except :
-                        return "ERROR"
+                        if pronounce == False :
+                            return translate_text
+                        elif pronounce == True :
+                            return [translate_text,pronounce_src,pronounce_tgt]
+                    except Exception:
+                        raise Exception
             r.raise_for_status()
         except requests.exceptions.ConnectTimeout as e :
             raise e
@@ -178,8 +187,8 @@ class google_translator:
             # Request failed
             raise google_new_transError(tts=self)
 
-    def detect(self,text):
-        text = str(text).strip('\n').replace('\n',"").replace('\t','').replace('\\\"','')
+    def detect(self, text):
+        text = str(text).strip('\n').replace('\n', "").replace('\t', '').replace('\\\"', '')
         if len(text) >= 5000:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
@@ -194,9 +203,9 @@ class google_translator:
         }
         freq = self._package_rpc(text)
         response = requests.Request(method='POST',
-                                     url=self.url,
-                                     data=freq,
-                                     headers=headers)
+                                    url=self.url,
+                                    data=freq,
+                                    headers=headers)
         try:
             if self.proxies == None or type(self.proxies) != dict:
                 self.proxies = {}
@@ -217,10 +226,10 @@ class google_translator:
                         response = json.loads(response[0][2])
                         response = list(response)
                         detect_lang = response[0][2]
-                    except Exception as e:
-                        raise Exception("error")
+                    except Exception:
+                        raise Exception
                     # data_got = data_got.split('\\\"]')[0]
-                    return [detect_lang,LANGUAGES[detect_lang.lower()]]
+                    return [detect_lang, LANGUAGES[detect_lang.lower()]]
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
