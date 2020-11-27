@@ -1,11 +1,11 @@
 # google_trans_new
-### Version 1.1.1
+### Version 1.1.2
 
 A free and unlimited python API for google translate.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 This interface is for academic use only, please do not use it for commercial use.  
   
-Version 1.1.1 add **Proxies** and **Multithreading Translate**
+Version 1.1.2 add **Pronounce**
 ***
   
   
@@ -87,11 +87,19 @@ detect_result = detector.detect('สวัสดีจีน')
 print(detect_result)
 -> ['th', 'thai']
 ```
+### Pronounce
+```python
+from google_trans_new import google_translator  
+  
+translator  = google_translator()  
+Pronounce = translator.transalate('สวัสดีจีน',lang_src='th',lang_tgt='zh',pronounce=True)  
+print(Pronounce)
+-> ['你好中国 ', 'S̄wạs̄dī cīn', 'Nǐ hǎo zhōngguó']
+```
 ***
 
 Prerequisites
 ====
-* **google_trans_new**
 * **Python >=3.6**  
 * **requests**  
 * **six**  
