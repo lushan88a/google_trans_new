@@ -1,9 +1,8 @@
 # coding:utf-8
 # author LuShan
-# version : 1.1.2
+# version : 1.1.3
 import json,requests,random,re
 from urllib.parse import quote
-from six.moves import urllib
 import urllib3
 import logging
 from .constant import LANGUAGES,DEFAULT_SERVICE_URLS
@@ -84,9 +83,6 @@ class google_translator:
     :param proxies: proxies Will be used for every request.
     :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
 
-    :param pronounce: Default False. If you set pronounce=True, you will return a list lile [text_trans,pronouce_src,pronounce_tgt].
-    :type pronounce: class : bool;
-
     '''
     def __init__(self,url_suffix="cn",timeout=5,proxies=None):
         self.proxies = proxies
@@ -118,10 +114,7 @@ class google_translator:
             lang = LANGUAGES[lang_tgt]
         except :
             lang_src = 'auto'
-        if type(text) == str:
-            text = text.strip('\n').replace('\n',"").replace('\t','').replace('\\\"','')
-        elif type(text) == list:
-            return "type error"
+        text = str(text.replace('\n',"").replace('\t','').replace('\\\"',''))
         if len(text) >= 5000:
             return "Warning: Can only detect less than 5000 characters"
         if len(text) == 0:
@@ -181,7 +174,7 @@ class google_translator:
             raise google_new_transError(tts=self)
 
     def detect(self, text):
-        text = str(text).strip('\n').replace('\n', "").replace('\t', '').replace('\\\"', '')
+        text = str(text).replace('\n', "").replace('\t', '').replace('\\\"', '')
         if len(text) >= 5000:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
