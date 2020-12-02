@@ -144,7 +144,6 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    print(decoded_line)
                     try :
                         response = (decoded_line + ']').replace('\\n','')
                         response = json.loads(response)
