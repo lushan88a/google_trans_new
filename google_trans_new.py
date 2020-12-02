@@ -144,8 +144,7 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    if 1:#try :
-                        logging.warning(decoded_line)
+                    try:
                         response = (decoded_line + ']')
                         response = json.loads(response)
                         response = list(response)
@@ -173,8 +172,8 @@ class google_translator:
                                 return sentences
                             elif pronounce == True:
                                 return [sentences, pronounce_src, pronounce_tgt]
-                    #except Exception as e :
-                    #    raise e
+                    except Exception as e :
+                        raise e
             r.raise_for_status()
         except requests.exceptions.ConnectTimeout as e :
             raise e
