@@ -2,7 +2,7 @@
 # author LuShan
 # version : 1.1.4
 import json,requests,random,re
-from urllib.parse import quote
+from urllib import quote
 import urllib3
 import logging
 from constant import LANGUAGES,DEFAULT_SERVICE_URLS
@@ -114,7 +114,7 @@ class google_translator:
             lang = LANGUAGES[lang_tgt]
         except :
             lang_src = 'auto'
-        text = str(text.replace('\n',"*·*").replace('\t','*¥*').replace('\\\"','*#*'))
+        text = str(text)
         if len(text) >= 5000:
             return "Warning: Can only detect less than 5000 characters"
         if len(text) == 0:
@@ -144,8 +144,9 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
-                    try :
-                        response = (decoded_line + ']').replace('\\n','')
+                    if 1:#try :
+                        logging.warning(decoded_line)
+                        response = (decoded_line + ']')
                         response = json.loads(response)
                         response = list(response)
                         response = json.loads(response[0][2])
@@ -159,7 +160,7 @@ class google_translator:
                             for sentence in sentences :
                                 sentence = sentence[0]
                                 translate_text += sentence.strip() + ' '
-                            translate_text = translate_text.replace("*·*",'\n').replace('*¥*','\t').replace('*#*','\\\"')
+                            translate_text = translate_text
                             if pronounce == False :
                                 return translate_text
                             elif pronounce == True :
@@ -167,13 +168,13 @@ class google_translator:
                         elif len(response) == 2:
                             sentences = []
                             for i in response:
-                                sentences.append(i[0].replace("*·*", '\n').replace('*¥*', '\t').replace('*#*','\\\"'))
+                                sentences.append(i[0])
                             if pronounce == False:
                                 return sentences
                             elif pronounce == True:
                                 return [sentences, pronounce_src, pronounce_tgt]
-                    except Exception as e :
-                        raise e
+                    #except Exception as e :
+                    #    raise e
             r.raise_for_status()
         except requests.exceptions.ConnectTimeout as e :
             raise e
