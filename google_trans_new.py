@@ -114,7 +114,7 @@ class google_translator:
             lang = LANGUAGES[lang_tgt]
         except :
             lang_src = 'auto'
-        text = str(text.replace('\n',"").replace('\t','').replace('\\\"',''))
+        text = str(text.replace('\n',"****").replace('\t','').replace('\\\"',''))
         if len(text) >= 5000:
             return "Warning: Can only detect less than 5000 characters"
         if len(text) == 0:
@@ -157,6 +157,7 @@ class google_translator:
                         for sentence in sentences :
                             sentence = sentence[0]
                             translate_text += sentence.strip() + ' '
+                        translate_text = translate_text.replace("****", "\n")
                         if pronounce == False :
                             return translate_text
                         elif pronounce == True :
