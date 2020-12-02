@@ -1,11 +1,11 @@
 # google_trans_new
-### Version 1.1.3
+### Version 1.1.4
 
 A free and unlimited python API for google translate.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 This interface is for academic use only, please do not use it for commercial use.  
   
-Version 1.1.3 add **Pronounce**
+Version 1.1.3 fixed some bug.
 ***
   
   
