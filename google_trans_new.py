@@ -1,11 +1,11 @@
 # coding:utf-8
 # author LuShan
-# version : 1.1.3
+# version : 1.1.4
 import json,requests,random,re
 from urllib.parse import quote
 import urllib3
 import logging
-from .constant import LANGUAGES,DEFAULT_SERVICE_URLS
+from constant import LANGUAGES,DEFAULT_SERVICE_URLS
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -114,7 +114,7 @@ class google_translator:
             lang = LANGUAGES[lang_tgt]
         except :
             lang_src = 'auto'
-        text = str(text.replace('\n',"****").replace('\t','').replace('\\\"',''))
+        text = str(text.replace('\n',"*·*").replace('\t','*¥*').replace('\\\"','*#*'))
         if len(text) >= 5000:
             return "Warning: Can only detect less than 5000 characters"
         if len(text) == 0:
@@ -144,6 +144,7 @@ class google_translator:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
+                    print(decoded_line)
                     try :
                         response = (decoded_line + ']').replace('\\n','')
                         response = json.loads(response)
@@ -152,18 +153,28 @@ class google_translator:
                         response = list(response)
                         pronounce_src = (response[0][0])
                         pronounce_tgt = (response[1][0][0][1])
-                        sentences = response[1][0][0][5]
-                        translate_text = ""
-                        for sentence in sentences :
-                            sentence = sentence[0]
-                            translate_text += sentence.strip() + ' '
-                        translate_text = translate_text.replace("****", "\n")
-                        if pronounce == False :
-                            return translate_text
-                        elif pronounce == True :
-                            return [translate_text,pronounce_src,pronounce_tgt]
-                    except Exception:
-                        raise Exception
+                        response = response[1][0]
+                        if len(response) == 1:
+                            sentences = response[0][5]
+                            translate_text = ""
+                            for sentence in sentences :
+                                sentence = sentence[0]
+                                translate_text += sentence.strip() + ' '
+                            translate_text = translate_text.replace("*·*",'\n').replace('*¥*','\t').replace('*#*','\\\"')
+                            if pronounce == False :
+                                return translate_text
+                            elif pronounce == True :
+                                return [translate_text,pronounce_src,pronounce_tgt]
+                        elif len(response) == 2:
+                            sentences = []
+                            for i in response:
+                                sentences.append(i[0].replace("*·*", '\n').replace('*¥*', '\t').replace('*#*','\\\"'))
+                            if pronounce == False:
+                                return sentences
+                            elif pronounce == True:
+                                return [sentences, pronounce_src, pronounce_tgt]
+                    except Exception as e :
+                        raise e
             r.raise_for_status()
         except requests.exceptions.ConnectTimeout as e :
             raise e
@@ -175,7 +186,7 @@ class google_translator:
             raise google_new_transError(tts=self)
 
     def detect(self, text):
-        text = str(text).replace('\n', "").replace('\t', '').replace('\\\"', '')
+        text = str(text.replace('\n',"*·*").replace('\t','*¥*').replace('\\\"','*#*'))
         if len(text) >= 5000:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
