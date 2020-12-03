@@ -2,7 +2,7 @@
 # author LuShan
 # version : 1.1.4
 import json,requests,random,re
-from urllib import quote
+from urllib.parse import quote
 import urllib3
 import logging
 from constant import LANGUAGES,DEFAULT_SERVICE_URLS
