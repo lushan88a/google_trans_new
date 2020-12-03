@@ -1,19 +1,20 @@
 # coding:utf-8
 # author LuShan
-# version : 1.1.4
-import json,requests,random,re
+# version : 1.1.6
+import json, requests, random, re
 from urllib.parse import quote
 import urllib3
 import logging
-from constant import LANGUAGES,DEFAULT_SERVICE_URLS
+from .constant import LANGUAGES, DEFAULT_SERVICE_URLS
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-URLS_SUFFIX = [re.search('translate.google.(.*)',url.strip()).group(1) for url in DEFAULT_SERVICE_URLS]
+URLS_SUFFIX = [re.search('translate.google.(.*)', url.strip()).group(1) for url in DEFAULT_SERVICE_URLS]
 URL_SUFFIX_DEFAULT = 'cn'
+
 
 class google_new_transError(Exception):
     """Exception that uses context to present a meaningful error message"""
@@ -55,6 +56,7 @@ class google_new_transError(Exception):
 
         return "{}. Probable cause: {}".format(premise, cause)
 
+
 class google_translator:
     '''
     You can use 108 language in target and source,details view LANGUAGES.
@@ -84,7 +86,8 @@ class google_translator:
     :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
 
     '''
-    def __init__(self,url_suffix="cn",timeout=5,proxies=None):
+
+    def __init__(self, url_suffix="cn", timeout=5, proxies=None):
         self.proxies = proxies
         if url_suffix not in URLS_SUFFIX:
             self.url_suffix = URL_SUFFIX_DEFAULT
@@ -94,9 +97,9 @@ class google_translator:
         self.url = url_base + "/_/TranslateWebserverUi/data/batchexecute"
         self.timeout = timeout
 
-    def _package_rpc(self,text,lang_src='auto',lang_tgt='auto'):
+    def _package_rpc(self, text, lang_src='auto', lang_tgt='auto'):
         GOOGLE_TTS_RPC = ["MkEWBc"]
-        parameter = [[text.strip(), lang_src, lang_tgt, True],[1]]
+        parameter = [[text.strip(), lang_src, lang_tgt, True], [1]]
         escaped_parameter = json.dumps(parameter, separators=(',', ':'))
         rpc = [[[random.choice(GOOGLE_TTS_RPC), escaped_parameter, None, "generic"]]]
         espaced_rpc = json.dumps(rpc, separators=(',', ':'))
@@ -105,14 +108,14 @@ class google_translator:
         freq = freq_initial
         return freq
 
-    def translate(self,text,lang_tgt='auto',lang_src='auto',pronounce = False):
+    def translate(self, text, lang_tgt='auto', lang_src='auto', pronounce=False):
         try:
             lang = LANGUAGES[lang_src]
-        except :
+        except:
             lang_src = 'auto'
         try:
             lang = LANGUAGES[lang_tgt]
-        except :
+        except:
             lang_src = 'auto'
         text = str(text)
         if len(text) >= 5000:
@@ -127,14 +130,14 @@ class google_translator:
                 "Chrome/47.0.2526.106 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
         }
-        freq = self._package_rpc(text,lang_src,lang_tgt)
+        freq = self._package_rpc(text, lang_src, lang_tgt)
         response = requests.Request(method='POST',
-                                     url=self.url,
-                                     data=freq,
-                                     headers=headers,
+                                    url=self.url,
+                                    data=freq,
+                                    headers=headers,
                                     )
         try:
-            if self.proxies == None or type(self.proxies) != dict :
+            if self.proxies == None or type(self.proxies) != dict:
                 self.proxies = {}
             with requests.Session() as s:
                 s.proxies = self.proxies
@@ -156,14 +159,14 @@ class google_translator:
                         if len(response) == 1:
                             sentences = response[0][5]
                             translate_text = ""
-                            for sentence in sentences :
+                            for sentence in sentences:
                                 sentence = sentence[0]
                                 translate_text += sentence.strip() + ' '
                             translate_text = translate_text
-                            if pronounce == False :
+                            if pronounce == False:
                                 return translate_text
-                            elif pronounce == True :
-                                return [translate_text,pronounce_src,pronounce_tgt]
+                            elif pronounce == True:
+                                return [translate_text, pronounce_src, pronounce_tgt]
                         elif len(response) == 2:
                             sentences = []
                             for i in response:
@@ -172,10 +175,10 @@ class google_translator:
                                 return sentences
                             elif pronounce == True:
                                 return [sentences, pronounce_src, pronounce_tgt]
-                    except Exception as e :
+                    except Exception as e:
                         raise e
             r.raise_for_status()
-        except requests.exceptions.ConnectTimeout as e :
+        except requests.exceptions.ConnectTimeout as e:
             raise e
         except requests.exceptions.HTTPError as e:
             # Request successful, bad response
@@ -185,7 +188,7 @@ class google_translator:
             raise google_new_transError(tts=self)
 
     def detect(self, text):
-        text = str(text.replace('\n',"*·*").replace('\t','*¥*').replace('\\\"','*#*'))
+        text = str(text.replace('\n', "*·*").replace('\t', '*¥*').replace('\\\"', '*#*'))
         if len(text) >= 5000:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
