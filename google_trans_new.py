@@ -1,6 +1,6 @@
 # coding:utf-8
 # author LuShan
-# version : 1.1.6
+# version : 1.1.9
 import json, requests, random, re
 from urllib.parse import quote
 import urllib3
@@ -152,12 +152,17 @@ class google_translator:
                         response = json.loads(response)
                         response = list(response)
                         response = json.loads(response[0][2])
-                        response = list(response)
-                        pronounce_src = (response[0][0])
-                        pronounce_tgt = (response[1][0][0][1])
-                        response = response[1][0]
+                        response_ = list(response)
+                        response = response_[1][0]
                         if len(response) == 1:
-                            sentences = response[0][5]
+                            if len(response[0]) > 5:
+                                sentences = response[0][5]
+                            else: ## only url
+                                sentences = response[0][0]
+                                if pronounce == False:
+                                    return sentences
+                                elif pronounce == True:
+                                    return [sentences,None,None]
                             translate_text = ""
                             for sentence in sentences:
                                 sentence = sentence[0]
@@ -166,6 +171,8 @@ class google_translator:
                             if pronounce == False:
                                 return translate_text
                             elif pronounce == True:
+                                pronounce_src = (response_[0][0])
+                                pronounce_tgt = (response_[1][0][0][1])
                                 return [translate_text, pronounce_src, pronounce_tgt]
                         elif len(response) == 2:
                             sentences = []
@@ -174,6 +181,8 @@ class google_translator:
                             if pronounce == False:
                                 return sentences
                             elif pronounce == True:
+                                pronounce_src = (response_[0][0])
+                                pronounce_tgt = (response_[1][0][0][1])
                                 return [sentences, pronounce_src, pronounce_tgt]
                     except Exception as e:
                         raise e
@@ -188,7 +197,7 @@ class google_translator:
             raise google_new_transError(tts=self)
 
     def detect(self, text):
-        text = str(text.replace('\n', "*·*").replace('\t', '*¥*').replace('\\\"', '*#*'))
+        text = str(text)
         if len(text) >= 5000:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
@@ -214,13 +223,14 @@ class google_translator:
                 r = s.send(request=response.prepare(),
                            verify=False,
                            timeout=self.timeout)
+
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
                     # regex_str = r"\[\[\"wrb.fr\",\"MkEWBc\",\"\[\[(.*).*?,\[\[\["
                     try:
                         # data_got = re.search(regex_str,decoded_line).group(1)
-                        response = (decoded_line + ']').replace('\\n', '')
+                        response = (decoded_line + ']')
                         response = json.loads(response)
                         response = list(response)
                         response = json.loads(response[0][2])
