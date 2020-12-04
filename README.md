@@ -1,11 +1,11 @@
 # google_trans_new
-### Version 1.1.8
+### Version 1.1.9
 
 A free and unlimited python API for google translate.  
 It's very easy to use and solve the problem that the old api which use tk value cannot be used.  
 This interface is for academic use only, please do not use it for commercial use.  
   
-Version 1.1.8 have fixed "\n" problem.
+Version 1.1.9 have fixed url translate.
 Ps:
 If your get translations for different genders, it will return a list.
 https://support.google.com/translate/answer/9179237?p=gendered_translations&hl=zh-Hans&visit_id=637425624803913067-1347870216&rd=1
