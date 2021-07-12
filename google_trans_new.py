@@ -148,7 +148,7 @@ class google_translator:
                 decoded_line = line.decode('utf-8')
                 if "MkEWBc" in decoded_line:
                     try:
-                        response = (decoded_line)
+                        response = decoded_line
                         response = json.loads(response)
                         response = list(response)
                         response = json.loads(response[0][2])
