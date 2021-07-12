@@ -95,7 +95,7 @@ print(detect_result)
 from google_trans_new import google_translator  
   
 translator  = google_translator()  
-Pronounce = translator.transalate('สวัสดีจีน',lang_src='th',lang_tgt='zh',pronounce=True)  
+Pronounce = translator.translate('สวัสดีจีน',lang_src='th',lang_tgt='zh',pronounce=True)  
 print(Pronounce)
 -> ['你好中国 ', 'S̄wạs̄dī cīn', 'Nǐ hǎo zhōngguó']
 ```
